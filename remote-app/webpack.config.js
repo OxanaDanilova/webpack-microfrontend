@@ -1,5 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const path = require('path');
+const deps = require('./package.json').dependencies;
 
 module.exports = (env, argv)=> {
   const istProductionMode = argv.mode === 'production';
@@ -18,9 +20,10 @@ module.exports = (env, argv)=> {
       static: {
         directory: path.resolve(__dirname, 'build'),
       },
-      port: 3000,
+      port: 5000,
       open: true,
       hot: true,
+      historyApiFallback: true,
     },
     module: {
       rules: [
@@ -52,7 +55,23 @@ module.exports = (env, argv)=> {
     plugins: [
       new HtmlWebpackPlugin({
         template: './index.html'
-      })
+      }),
+      new ModuleFederationPlugin({
+        name: "remote", // it needs to be identical to the key value "[here]@xxxxx" in our Host config
+        filename: "remoteEntry.js", // sets the name of the manifest file
+        exposes: {
+          "./RemoteApp": "./src/App.tsx",  // aliases files names
+        },
+        shared: {
+          react: { singleton: true },
+          'react-router-dom': {
+            singleton: true,
+          },
+          'react-dom': {
+            singleton: true,
+          },
+        },
+      }),
     ],
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
