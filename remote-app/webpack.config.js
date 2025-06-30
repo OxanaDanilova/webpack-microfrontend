@@ -1,7 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const path = require('path');
-const deps = require('./package.json').dependencies;
 
 module.exports = (env, argv)=> {
   const istProductionMode = argv.mode === 'production';
@@ -57,10 +56,10 @@ module.exports = (env, argv)=> {
         template: './index.html'
       }),
       new ModuleFederationPlugin({
-        name: "remote", // it needs to be identical to the key value "[here]@xxxxx" in our Host config
-        filename: "remoteEntry.js", // sets the name of the manifest file
+        name: "remote",
+        filename: "remoteEntry.js",
         exposes: {
-          "./RemoteApp": "./src/App.tsx",  // aliases files names
+          "./RemoteApp": "./src/App.tsx",
         },
         shared: {
           react: { singleton: true },
