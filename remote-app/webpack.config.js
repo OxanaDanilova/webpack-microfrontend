@@ -2,10 +2,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const path = require('path');
 
-module.exports = (env, argv)=> {
-  const istProductionMode = argv.mode === 'production';
-  return {
-    mode: istProductionMode ? 'production' : 'development',
+module.exports = ()=> {
+   return {
+    mode: 'development',
     entry: {
       main: './src/main.tsx',
     },
