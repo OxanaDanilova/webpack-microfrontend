@@ -13,4 +13,3 @@ dist-ssr
 build
 *.local
 .idea
-package-lock.json
